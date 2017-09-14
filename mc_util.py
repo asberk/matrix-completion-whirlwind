@@ -74,8 +74,8 @@ def matrixCompletionSetup(r, m, n=None, p=None):
     """
     print('There has been a re-write of this function. Please ' +
           'check documentation or source for more information.' +
-          'cf. sparseMatComSetup for a sparse version of this ' + 
-          'function.')
+          ' (cf. sparseMatComSetup for a sparse version of this ' + 
+          'function.)')
     if n is None:
         n = m
     if p is None:
