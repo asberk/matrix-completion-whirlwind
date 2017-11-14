@@ -90,13 +90,36 @@ def matrixCompletionSetup(r, m, n=None, p=None):
     return (U, V, M_Omega, Omega, Omega_mask)
 
 
-def sparseMatComSetup(r,m,n,p):
+def sparseMatComSetup(r,m,n,p,rng=None):
+    """
+    sparseMatComSetup(r,m,n,p) returns the necessary components for a simple
+    set-up of a matrix completion problem.
+
+    Input: 
+      r : rank
+      m : number of rows
+      n : number of columns
+      p : probability of uniform at random observation
+    rng : the randomness to use (e.g. 
+          lambda d,r : np.random.randint(5, size=(d,r))
+          lambda d,r : 2*np.random.randn(d,r)
+
+    Output:
+          U : The left [sparse] matrix such that U @ V.T = M
+          V : The right [sparse] matrix V such that U @ V.T = M
+      Omega : A tuple (I, J) containing a vector of row and column indices
+              corresponding to which entries of M were observed.
+        obs : A vector of observations corresponding to entries of M at Omega.
+    M_Omega : An m-by-n sparse matrix s.t. M_Omega[Omega] == obs.
+    """
+    if rng is None:
+        rng = lambda d,r: np.random.randint(5, size=(d,r))
     k = np.random.binomial(m*n, p)
     Omega = (np.random.randint(m, size=k), np.random.randint(n, size=k))
-    U = np.random.randint(5, size=(m,r))
-    V = np.random.randint(5, size=(n,r))
+    U = rng(m,r)
+    V = rng(n,r)
     observations = multiplyFromMatIdxList(U, V, Omega)
-    M_Omega = sparse.csr_matrix((observations, Omega), 
+    M_Omega = csr_matrix((observations, Omega), 
                                 shape=(m,n))
     return (U, V, Omega, observations, M_Omega)
 
