@@ -6,6 +6,7 @@ import scipy.sparse as sparse
 import matplotlib.pyplot as plt
 
 from mc_util import *
+from mc_solve import altMinSense
 
 def main():
     np.random.seed(1)
